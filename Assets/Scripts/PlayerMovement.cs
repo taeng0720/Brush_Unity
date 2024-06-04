@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
+
     [Header("Movement")]
     private float moveSpeed;
     public float walkSpeed;
     public float sprintSpeed;
     public float slideSpeed;
-
+    public float climbSpeed;
     private float desiredMoveSpeed;
     private float lastDesiredMoveSpeed;
 
@@ -38,12 +41,15 @@ public class PlayerMovement : MonoBehaviour
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask whatIsGround;
-    bool grounded;
+    public bool grounded;
 
     [Header("Slope Handling")]
     public float maxSlopeAngle;
     private RaycastHit slopeHit;
     private bool exitingSlope;
+
+    [Header("References")]
+    public Climbing climbingScript;
 
     public Transform orientation;
 
@@ -55,15 +61,19 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody rb;
 
     public MovementState state;
+
+    public TextMeshProUGUI speed_text;
+    public TextMeshProUGUI state_text;
     public enum MovementState
     {
         walking,
         sprinting,
+        climbing,
         crouching,
         sliding,
         air
     }
-
+    public bool climbing;
     public bool sliding;
     private void Start()
     {
@@ -80,6 +90,9 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Update()
     {
+        //UI
+        speed_text.text = desiredMoveSpeed.ToString();
+        state_text.text = state.ToString();
         //ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f,whatIsGround);
 
@@ -119,8 +132,14 @@ public class PlayerMovement : MonoBehaviour
     }
     private void StateHandler()
     {
+        //Climbing
+        if(climbing)
+        {
+            state = MovementState.climbing;
+            desiredMoveSpeed = climbSpeed;
+        }
         //Sliding
-        if (sliding)
+        else if (sliding)
         {
             state = MovementState.sliding;
 
@@ -130,13 +149,13 @@ public class PlayerMovement : MonoBehaviour
                 desiredMoveSpeed = sprintSpeed;
         }
         //Crouching
-        if (Input.GetKey(crouchKey))
+        else if (Input.GetKey(crouchKey))
         {
             state = MovementState.crouching;
             desiredMoveSpeed = crouchSpeed;
         }
         //Sprinting
-        if(grounded && Input.GetKey(sprintKey))
+        else if(grounded && Input.GetKey(sprintKey))
         {
             state = MovementState.sprinting;
             desiredMoveSpeed = sprintSpeed;
@@ -189,6 +208,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void MovePlayer()
     {
+        if (climbingScript.exitingWall) return;
         //movement direction
         moveDirection = orientation.forward * verticalInput+orientation.right * horizontalInput;
 
