@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public float walkSpeed;
     public float sprintSpeed;
     public float slideSpeed;
+    public float wallrunSpeed;
     public float climbSpeed;
     private float desiredMoveSpeed;
     private float lastDesiredMoveSpeed;
@@ -66,8 +67,11 @@ public class PlayerMovement : MonoBehaviour
     public TextMeshProUGUI state_text;
     public enum MovementState
     {
+        freeze,
+        unlimited,
         walking,
         sprinting,
+        wallrunning,
         climbing,
         crouching,
         sliding,
@@ -75,6 +79,12 @@ public class PlayerMovement : MonoBehaviour
     }
     public bool climbing;
     public bool sliding;
+    public bool wallrunning;
+
+    public bool freeze;
+    public bool unlimited;
+
+    public bool restricted;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -132,8 +142,28 @@ public class PlayerMovement : MonoBehaviour
     }
     private void StateHandler()
     {
+
+        //Freeze
+        if (freeze)
+        {
+            state = MovementState.freeze;
+            rb.velocity = Vector3.zero;
+        }
+        //Unlimited
+        else if (unlimited)
+        {
+            state = MovementState.unlimited;
+            moveSpeed = 999f;
+            return;
+        }
+        //Wallrunning
+        else if (wallrunning)
+        {
+            state = MovementState.wallrunning;
+            desiredMoveSpeed = wallrunSpeed;
+        }
         //Climbing
-        if(climbing)
+        else if(climbing)
         {
             state = MovementState.climbing;
             desiredMoveSpeed = climbSpeed;
@@ -208,6 +238,9 @@ public class PlayerMovement : MonoBehaviour
     }
     private void MovePlayer()
     {
+        if (restricted) return;
+
+
         if (climbingScript.exitingWall) return;
         //movement direction
         moveDirection = orientation.forward * verticalInput+orientation.right * horizontalInput;
