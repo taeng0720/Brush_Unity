@@ -89,7 +89,7 @@ public class LedgeGrabbing : MonoBehaviour
         float distanceToLedge = Vector3.Distance(transform.position, currentLedge.position);
 
         //Move Player towards ledge
-        if(distanceToLedge < 1f)
+        if(distanceToLedge > 1f)
         {
             if(rb.velocity.magnitude < moveToLedgeSpeed)
                 rb.AddForce(directionToLedge.normalized * moveToLedgeSpeed * 1000f * Time.deltaTime);
