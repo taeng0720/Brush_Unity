@@ -15,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
     public float slideSpeed;
     public float wallrunSpeed;
     public float climbSpeed;
+    public float dashSpeed;
+    public float dashSpeedChangeFactor;
     private float desiredMoveSpeed;
     private float lastDesiredMoveSpeed;
 
@@ -62,6 +64,8 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody rb;
 
     public MovementState state;
+    private MovementState lastState;
+    private bool keepMomentum;
 
     public TextMeshProUGUI speed_text;
     public TextMeshProUGUI state_text;
@@ -72,6 +76,7 @@ public class PlayerMovement : MonoBehaviour
         walking,
         sprinting,
         wallrunning,
+        dashing,
         climbing,
         crouching,
         sliding,
@@ -80,6 +85,7 @@ public class PlayerMovement : MonoBehaviour
     public bool climbing;
     public bool sliding;
     public bool wallrunning;
+    public bool dashing;
 
     public bool freeze;
     public bool unlimited;
@@ -110,7 +116,7 @@ public class PlayerMovement : MonoBehaviour
         SpeedControl();
         StateHandler();
         //handle drag
-        if (grounded)
+        if (state == MovementState.walking || state == MovementState.sprinting || state == MovementState.crouching)
             rb.drag = groundDrag;
         else
             rb.drag = 0;
@@ -156,6 +162,13 @@ public class PlayerMovement : MonoBehaviour
             moveSpeed = 999f;
             return;
         }
+        //Dashing
+        else if (dashing)
+        {
+            state = MovementState.dashing;
+            desiredMoveSpeed = dashSpeed;
+            speedChangeFactor = dashSpeedChangeFactor;
+        }
         //Wallrunning
         else if (wallrunning)
         {
@@ -200,8 +213,32 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             state = MovementState.air;
+            if (desiredMoveSpeed < sprintSpeed)
+                desiredMoveSpeed = walkSpeed;
+            else
+                desiredMoveSpeed = sprintSpeed;
         }
-        if(Mathf.Abs(desiredMoveSpeed - lastDesiredMoveSpeed) > 4f && moveSpeed !=0)
+
+        bool desiredMoveSpeedHasChanged = desiredMoveSpeed != lastDesiredMoveSpeed;
+        if(lastState == MovementState.dashing) keepMomentum = true;
+
+        if(desiredMoveSpeedHasChanged)
+        {
+            if (keepMomentum)
+            {
+                StopAllCoroutines();
+                StartCoroutine(SmoothlyLerpMoveSpeed());
+            }
+            else
+            {
+                StopAllCoroutines();
+                moveSpeed = desiredMoveSpeed;
+            }
+        }
+        {
+            
+        }
+        if (Mathf.Abs(desiredMoveSpeed - lastDesiredMoveSpeed) > 4f && moveSpeed !=0)
         {
             StopAllCoroutines();
             StartCoroutine(SmoothlyLerpMoveSpeed());
@@ -211,12 +248,16 @@ public class PlayerMovement : MonoBehaviour
             moveSpeed = desiredMoveSpeed;
         }
         lastDesiredMoveSpeed = desiredMoveSpeed;
+        lastState = state;
     }
+    private float speedChangeFactor;
     private IEnumerator SmoothlyLerpMoveSpeed()
     {
         float time = 0;
         float diffrence = Mathf.Abs(desiredMoveSpeed - moveSpeed);
         float startValue = moveSpeed;
+
+        float boostFactor = speedChangeFactor;
         while (time < diffrence)
         {
             moveSpeed = Mathf.Lerp(startValue,desiredMoveSpeed,time / diffrence);
@@ -229,12 +270,14 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                time += Time.deltaTime * speedIncreaseMultipiler;
+                time += Time.deltaTime * boostFactor;
             }
             
             yield return null;
         }
         moveSpeed = desiredMoveSpeed;
+        speedChangeFactor = 1f;
+        keepMomentum = false;
     }
     private void MovePlayer()
     {

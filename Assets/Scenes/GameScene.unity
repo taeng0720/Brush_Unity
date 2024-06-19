@@ -22062,6 +22062,7 @@ GameObject:
   - component: {fileID: 1442081858}
   - component: {fileID: 1442081859}
   - component: {fileID: 1442081860}
+  - component: {fileID: 1442081861}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -22131,6 +22132,8 @@ MonoBehaviour:
   slideSpeed: 30
   wallrunSpeed: 8.5
   climbSpeed: 3
+  dashSpeed: 20
+  dashSpeedChangeFactor: 50
   speedIncreaseMultipiler: 1.5
   slopeIncreaseMultipiler: 2.5
   groundDrag: 4
@@ -22156,6 +22159,7 @@ MonoBehaviour:
   climbing: 0
   sliding: 0
   wallrunning: 0
+  dashing: 0
   freeze: 0
   unlimited: 0
   restricted: 0
@@ -22288,6 +22292,25 @@ MonoBehaviour:
   currentColor: {r: 0, g: 0, b: 0, a: 0}
   defaultColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
   holdColor: 0
+--- !u!114 &1442081861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442081852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c78b5b4e7eed5247a9adf8bcd8af53a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orientation: {fileID: 884157385}
+  playerCam: {fileID: 2025121162}
+  dashForce: 20
+  dashUpwardForce: 0
+  dashDuration: 0.25
+  dashCd: 1.5
+  dashKey: 118
 --- !u!1 &1467220565
 GameObject:
   m_ObjectHideFlags: 0
