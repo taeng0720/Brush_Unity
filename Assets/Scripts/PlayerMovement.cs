@@ -17,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     public float climbSpeed;
     public float dashSpeed;
     public float dashSpeedChangeFactor;
+
+    public float maxYSpeed;
     private float desiredMoveSpeed;
     private float lastDesiredMoveSpeed;
 
@@ -281,6 +283,8 @@ public class PlayerMovement : MonoBehaviour
     }
     private void MovePlayer()
     {
+        if (state == MovementState.dashing) return;
+
         if (restricted) return;
 
 
@@ -331,6 +335,9 @@ public class PlayerMovement : MonoBehaviour
                 rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
             }
         }
+
+        if(maxYSpeed !=0 && rb.velocity.y > maxYSpeed)
+            rb.velocity = new Vector3(rb.velocity.x,maxYSpeed, rb.velocity.z);
         
     }
     private void Jump()

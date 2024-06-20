@@ -22134,6 +22134,7 @@ MonoBehaviour:
   climbSpeed: 3
   dashSpeed: 20
   dashSpeedChangeFactor: 50
+  maxYSpeed: 0
   speedIncreaseMultipiler: 1.5
   slopeIncreaseMultipiler: 2.5
   groundDrag: 4
@@ -22308,7 +22309,14 @@ MonoBehaviour:
   playerCam: {fileID: 2025121162}
   dashForce: 20
   dashUpwardForce: 0
+  maxDashYSpeed: 15
   dashDuration: 0.25
+  cam: {fileID: 2025121163}
+  dashFov: 95
+  useCameraForward: 1
+  allowAllDirections: 1
+  disableGravity: 1
+  resetVel: 1
   dashCd: 1.5
   dashKey: 118
 --- !u!1 &1467220565
