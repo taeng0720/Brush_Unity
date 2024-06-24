@@ -53,6 +53,8 @@ public class Grappling : MonoBehaviour
     {
         if (grapplingCdTimer > 0) return;
 
+        GetComponent<Swinging>().StopSwing();
+
         grappling = true;
 
         pm.freeze = true;
@@ -100,5 +102,14 @@ public class Grappling : MonoBehaviour
         grapplingCdTimer = grapplingCd;
 
         lr.enabled = false;
+    }
+    public bool IsGrappling()
+    {
+        return grappling;
+    }
+
+    public Vector3 GetGrapplePoint()
+    {
+        return grapplePoint;
     }
 }

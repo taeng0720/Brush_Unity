@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GetColor : MonoBehaviour
 {
-    public KeyCode getColorKey = KeyCode.E;
+    public KeyCode getColorKey = KeyCode.R;
     public KeyCode applyColorKey = KeyCode.F;
     
     public Color currentColor;

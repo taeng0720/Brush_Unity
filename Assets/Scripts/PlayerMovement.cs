@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     private float moveSpeed;
     public float walkSpeed;
     public float sprintSpeed;
+    public float swingSpeed;
     public float slideSpeed;
     public float wallrunSpeed;
     public float climbSpeed;
@@ -78,6 +79,7 @@ public class PlayerMovement : MonoBehaviour
         walking,
         sprinting,
         wallrunning,
+        swinging,
         dashing,
         climbing,
         crouching,
@@ -88,6 +90,7 @@ public class PlayerMovement : MonoBehaviour
     public bool sliding;
     public bool wallrunning;
     public bool dashing;
+    public bool swinging;
 
     public bool freeze;
     public bool unlimited;
@@ -173,6 +176,12 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.dashing;
             desiredMoveSpeed = dashSpeed;
             speedChangeFactor = dashSpeedChangeFactor;
+        }
+        //Swinging
+        else if (swinging)
+        {
+            state = MovementState.swinging;
+            moveSpeed = swingSpeed;
         }
         //Wallrunning
         else if (wallrunning)
@@ -287,6 +296,7 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayer()
     {
         if (activeGrapple) return;
+        if (swinging) return;
 
         if (state == MovementState.dashing) return;
 
