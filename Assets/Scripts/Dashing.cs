@@ -112,7 +112,7 @@ public class Dashing : MonoBehaviour
         else
             direction = forwardT.forward;
 
-        if(verticalInput ==0 && horizontalInput == 0)
+        if(verticalInput == 0 && horizontalInput == 0)
             direction = forwardT.forward;
 
         return direction.normalized;

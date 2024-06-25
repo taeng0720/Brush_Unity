@@ -295,17 +295,17 @@ public class PlayerMovement : MonoBehaviour
     }
     private void MovePlayer()
     {
-        if (activeGrapple) return;
-        if (swinging) return;
-
         if (state == MovementState.dashing) return;
+
+        if (activeGrapple) return;
+
+        if (swinging) return;
 
         if (restricted) return;
 
-
         if (climbingScript.exitingWall) return;
         //movement direction
-        moveDirection = orientation.forward * verticalInput+orientation.right * horizontalInput;
+        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
         //on slope
         if (OnSlope() && !exitingSlope)
