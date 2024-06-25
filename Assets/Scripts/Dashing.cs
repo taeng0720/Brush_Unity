@@ -108,7 +108,10 @@ public class Dashing : MonoBehaviour
         Vector3 direction = new Vector3();
 
         if (allowAllDirections)
-            direction = forwardT.forward * verticalInput + forwardT.right * horizontalInput;
+        {
+            direction = (forwardT.forward * verticalInput) + (forwardT.right * horizontalInput);
+        }
+            
         else
             direction = forwardT.forward;
 
