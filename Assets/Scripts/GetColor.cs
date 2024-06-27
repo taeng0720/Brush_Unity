@@ -6,20 +6,22 @@ using UnityEngine.UI;
 
 public class GetColor : MonoBehaviour
 {
+    [Header("Input")]
     public KeyCode getColorKey = KeyCode.R;
     public KeyCode applyColorKey = KeyCode.F;
-    
+
+    [Header("References")]
+    [SerializeField] private float maxDistance = 10f;
     public Color currentColor;
     public Color defaultColor = new Color(128, 128, 128);
     public bool holdColor = false;
-
     private int selectColor = 1;
     public Image[] colorsUI;
     private void GetMaterial()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if(Physics.Raycast(ray,out hit) && hit.transform.gameObject.GetComponent<MeshRenderer>().material.color != defaultColor)
+        if(Physics.Raycast(ray,out hit,maxDistance) && hit.transform.gameObject.GetComponent<MeshRenderer>().material.color != defaultColor)
         {
             currentColor = hit.transform.gameObject.GetComponent<MeshRenderer>().material.color;
             hit.transform.gameObject.GetComponent<MeshRenderer>().material.color = defaultColor;
@@ -36,7 +38,7 @@ public class GetColor : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit) && colorsUI[selectColor-1].color != defaultColor)
+        if (Physics.Raycast(ray, out hit,maxDistance) && colorsUI[selectColor-1].color != defaultColor)
         {
             hit.transform.gameObject.GetComponent<MeshRenderer>().material.color = colorsUI[selectColor-1].color;
             colorsUI[selectColor - 1].color = defaultColor;
