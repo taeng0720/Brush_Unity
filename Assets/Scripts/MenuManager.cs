@@ -44,6 +44,7 @@ public class MenuManager : MonoBehaviour
             menuPanel = canvas.transform.GetChild(0).gameObject;
             exitBtn = menuPanel.transform.GetChild(0).gameObject.GetComponent<Button>();
             continueBtn = menuPanel.transform.GetChild(1).gameObject.GetComponent<Button>();
+            GameManager.instance.gameObject.GetComponent<FpsStatus>().enabled = true;
             if (exitBtn != null && continueBtn != null)
             {
                 exitBtn.onClick.AddListener(Exitbtn);

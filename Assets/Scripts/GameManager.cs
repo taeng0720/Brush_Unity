@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
             // 메인 씬에서 버튼 찾기
             startBtn = GameObject.Find("Startbtn").GetComponent<Button>();
             exitBtn = GameObject.Find("Exitbtn").GetComponent<Button>();
-            
+            gameObject.GetComponent<FpsStatus>().enabled = false;
             if (startBtn != null && exitBtn != null)
             {
                 startBtn.onClick.AddListener(Startbtn);
@@ -57,7 +57,6 @@ public class GameManager : MonoBehaviour
     public void Startbtn()
     {
         SceneManager.LoadScene("GameScene");
-        gameObject.GetComponent<FpsStatus>().enabled = true;
         DataManager.Instance.LoadGameData();
     }
     
