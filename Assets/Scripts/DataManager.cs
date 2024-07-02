@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-
+using System;
 
 public class DataManager : MonoBehaviour
 {
     static GameObject container;
 
-    static DataManager instance;
+    private GetColor gc;
 
+    static DataManager instance;
     public static DataManager Instance
     {
         get
@@ -25,30 +26,37 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    string GameDataFileName = "GameData.json";
-
-    public Data data = new Data();
+    public Data data;
 
     public void LoadGameData()
     {
-        string filePath = Application.persistentDataPath + "/" + GameDataFileName;
-
-        //저장된 게임이 존재한다면
-        if(File.Exists(filePath))
-        {
-            //저장된 파일 읽어오고 Json을 클래스 형식으로 전환해서 할당
-            string FromJsonData = File.ReadAllText(filePath);
-            data = JsonUtility.FromJson<Data>(FromJsonData);
-        }
+        // 데이터를 불러올 경로 지정
+        string path = Path.Combine(Application.dataPath, "Data.json");
+        // 파일의 텍스트를 string으로 저장
+        string jsonData = File.ReadAllText(path);
+        // 이 Json데이터를 역직렬화하여 playerData에 넣어줌
+        data = JsonUtility.FromJson<Data>(jsonData);
     }
+
     public void SaveGameData()
     {
-        //클래스를 Json형식으로 전환
-        string ToJsonData = JsonUtility.ToJson(data, true);
-        string filePath = Application.persistentDataPath + "/" + GameDataFileName;
-
-        //이미 저장된 파일이 있다면 덮어씌우고, 없다면 새로만들어 저장
-        File.WriteAllText(filePath, ToJsonData);
+        for (int i = 0; gc.colorsUI.Length > i; i++)
+        {
+            data.colors[i] = gc.colorsUI[i].color.ToString();
+        }
+        
+        // ToJson을 사용하면 JSON형태로 포멧팅된 문자열이 생성된다  
+        string jsonData = JsonUtility.ToJson(data,true);
+        // 데이터를 저장할 경로 지정
+        string path = Path.Combine(Application.dataPath, "Data.json");
+        // 파일 생성 및 저장
+        File.WriteAllText(path, jsonData);
     }
+}
+
+[Serializable]
+public class Data
+{
+    public string[] colors;
 }
 

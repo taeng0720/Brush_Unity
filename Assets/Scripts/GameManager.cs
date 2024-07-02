@@ -68,14 +68,6 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     #endif
     }
-    public void Savebtn()
-    {
-        DataManager.Instance.SaveGameData();
-    }
-    public void Loadbtn()
-    {
-        DataManager.Instance.LoadGameData();
-    }
     
     private void OnApplicationQuit()
     {
