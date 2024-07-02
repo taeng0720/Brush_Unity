@@ -18,7 +18,7 @@
  - 팀원5 : 정유림 - 디자인
 
 ### ⚙️ 개발 환경
-- **DEV Tools** : Unity, Rider, VS, VSC
+- **DEV Tools** : Unity, Rider, VS, VSC
 - **Design Tools** : Blender, 등등 서술할 예정
 
 ## 📌 주요 기능
