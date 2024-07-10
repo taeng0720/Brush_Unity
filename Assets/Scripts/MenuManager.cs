@@ -74,9 +74,10 @@ public class MenuManager : MonoBehaviour
 
     public void Exitbtn()
     {
+        DataManager.Instance.SaveGameData();
         menuEnabled = false;
         SceneManager.LoadSceneAsync("MainScene", LoadSceneMode.Single);
-        DataManager.Instance.SaveGameData();
+        
     }
     public void Continue()
     {

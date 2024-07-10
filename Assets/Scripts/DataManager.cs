@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
+using UnityEngine.SceneManagement;
 
 public class DataManager : MonoBehaviour
 {
@@ -28,6 +29,22 @@ public class DataManager : MonoBehaviour
 
     public Data data;
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "GameScene")
+        {
+            gc = GameObject.Find("Player").GetComponent<GetColor>();
+        }
+    }
     public void LoadGameData()
     {
         // 데이터를 불러올 경로 지정
@@ -42,7 +59,7 @@ public class DataManager : MonoBehaviour
     {
         for (int i = 0; gc.colorsUI.Length > i; i++)
         {
-            data.colors[i] = gc.colorsUI[i].color.ToString();
+            data.colors[i] = gc.colorsUI[i].color;
         }
         
         // ToJson을 사용하면 JSON형태로 포멧팅된 문자열이 생성된다  
@@ -57,6 +74,6 @@ public class DataManager : MonoBehaviour
 [Serializable]
 public class Data
 {
-    public string[] colors;
+    public Color[] colors = new Color[] { Color.white, Color.white, Color.white};
 }
 
