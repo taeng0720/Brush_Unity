@@ -43,6 +43,10 @@ public class DataManager : MonoBehaviour
         if (scene.name == "GameScene")
         {
             gc = GameObject.Find("Player").GetComponent<GetColor>();
+            for (int i = 0; gc.colorsUI.Length > i; i++)
+            {
+                gc.colorsUI[i].color = data.colors[i];
+            }
         }
     }
     public void LoadGameData()
@@ -53,8 +57,9 @@ public class DataManager : MonoBehaviour
         string jsonData = File.ReadAllText(path);
         // 이 Json데이터를 역직렬화하여 playerData에 넣어줌
         data = JsonUtility.FromJson<Data>(jsonData);
+        
     }
-
+    
     public void SaveGameData()
     {
         for (int i = 0; gc.colorsUI.Length > i; i++)

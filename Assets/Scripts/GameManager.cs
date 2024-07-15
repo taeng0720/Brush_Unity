@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    
     private void Update()
     {
         if (SceneManager.GetActiveScene().name == "MainScene")
@@ -67,10 +68,5 @@ public class GameManager : MonoBehaviour
     #else
         Application.Quit();
     #endif
-    }
-    
-    private void OnApplicationQuit()
-    {
-        DataManager.Instance.SaveGameData();
     }
 }
