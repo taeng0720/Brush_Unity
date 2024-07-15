@@ -22,7 +22,13 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+    private void Update()
+    {
+        if (SceneManager.GetActiveScene().name == "MainScene")
+        {
+            gameObject.GetComponent<FpsStatus>().enabled = false;
+        }
+    }
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -51,6 +57,7 @@ public class GameManager : MonoBehaviour
     public void Startbtn()
     {
         SceneManager.LoadScene("GameScene");
+        DataManager.Instance.LoadGameData();
     }
     
     public void GameExit()
@@ -61,5 +68,9 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     #endif
     }
-
+    
+    private void OnApplicationQuit()
+    {
+        DataManager.Instance.SaveGameData();
+    }
 }
