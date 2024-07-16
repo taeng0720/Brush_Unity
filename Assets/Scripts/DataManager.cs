@@ -57,7 +57,6 @@ public class DataManager : MonoBehaviour
         string jsonData = File.ReadAllText(path);
         // 이 Json데이터를 역직렬화하여 playerData에 넣어줌
         data = JsonUtility.FromJson<Data>(jsonData);
-        
     }
     
     public void SaveGameData()
