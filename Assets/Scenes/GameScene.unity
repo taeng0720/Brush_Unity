@@ -25219,7 +25219,7 @@ GameObject:
   - component: {fileID: 1518107464}
   - component: {fileID: 1518107463}
   - component: {fileID: 1518107466}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GrappleGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27727,7 +27727,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1831296591}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GunTip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
