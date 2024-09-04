@@ -2,8 +2,14 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
+<<<<<<< HEAD
   serializedVersion: 3
   tags: []
+=======
+  serializedVersion: 2
+  tags:
+  - GetColor
+>>>>>>> 5d71bce99fe43f41fb0ce088d61cc8d6a58d87f7
   layers:
   - Default
   - TransparentFX
