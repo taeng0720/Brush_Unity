@@ -63,7 +63,7 @@ public class LedgeGrabbing : MonoBehaviour
     private void DelayedJumpForce()
     {
         Vector3 forceToAdd = cam.forward * ledgeJumpForwardForce + orientation.up * ledgeJumpUpwardForce;
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
         rb.AddForce(forceToAdd, ForceMode.Impulse);
     }
     private void EnterLedgeHold()
@@ -77,7 +77,7 @@ public class LedgeGrabbing : MonoBehaviour
         lastLedge = ledgeHit.transform;
 
         rb.useGravity = false;
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
 
     }
 
@@ -91,7 +91,7 @@ public class LedgeGrabbing : MonoBehaviour
         //Move Player towards ledge
         if(distanceToLedge > 1f)
         {
-            if(rb.velocity.magnitude < moveToLedgeSpeed)
+            if(rb.linearVelocity.magnitude < moveToLedgeSpeed)
                 rb.AddForce(directionToLedge.normalized * moveToLedgeSpeed * 1000f * Time.deltaTime);
         }
 
