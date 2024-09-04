@@ -21,7 +21,7 @@ public class GetColor : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if(Physics.Raycast(ray,out hit,maxDistance) && hit.transform.gameObject.GetComponent<MeshRenderer>().material.color != defaultColor)
+        if(Physics.Raycast(ray,out hit,maxDistance) && hit.transform.gameObject.GetComponent<MeshRenderer>().material.color != defaultColor && hit.transform.gameObject.tag == "GetColor")
         {
             currentColor = hit.transform.gameObject.GetComponent<MeshRenderer>().material.color;
             hit.transform.gameObject.GetComponent<MeshRenderer>().material.color = defaultColor;
