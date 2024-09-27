@@ -22,15 +22,14 @@ public class GetColor : MonoBehaviour
 
     private void Awake()
     {
-        // 싱글톤 패턴 구현
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // 씬이 전환되어도 객체를 파괴하지 않음
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(gameObject); // 이미 인스턴스가 존재하면 새로운 객체는 파괴
+            Destroy(gameObject);
         }
     }
 
@@ -87,7 +86,6 @@ public class GetColor : MonoBehaviour
             holdColor = true;
         }
 
-        // 여러 슬롯에서 색을 제대로 적용할 수 있도록 수정
         for (int i = 0; i < colorsUI.Length; i++)
         {
             if (colorsUI[i].color != defaultColor)
