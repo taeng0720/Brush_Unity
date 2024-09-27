@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - GetColor
+  - cave
   layers:
   - Default
   - TransparentFX

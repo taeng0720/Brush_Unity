@@ -3,21 +3,6 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
-    public static SceneLoader Instance { get; private set; }
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-    }
-
     public void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
@@ -28,17 +13,31 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene(animationSceneName);
     }
 
+
     public void MoveToVillageOrCave(string targetScene)
     {
         float currentProgress = ProgressManager.Instance.progress;
 
-        if (currentProgress >= 10 && currentProgress % 10 == 0)
+        if (currentProgress % 10 == 0 && currentProgress != 0)
         {
             LoadSceneWithAnimation("Animation");
+            Animation_Scene.Scene_Name = targetScene;
         }
         else
         {
             LoadScene(targetScene);
         }
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "cave")
+        {
+            MoveToVillageOrCave("cave");
+        }
+        else if (other.gameObject.tag == "Village")
+        {
+            MoveToVillageOrCave("Village");
+        }
+
     }
 }
