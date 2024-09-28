@@ -34701,6 +34701,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxProgress: 100
+  Managers: {fileID: 1591404507}
   postProcessVolume: {fileID: 1769887043}
   inspectorProgress: 0
 --- !u!4 &1803548834
