@@ -18,7 +18,7 @@ public class SceneLoader : MonoBehaviour
     {
         float currentProgress = ProgressManager.Instance.progress;
 
-        if (currentProgress % 10 == 0 && currentProgress != 0)
+        if (currentProgress % 20 == 0 && currentProgress != 0)
         {
             LoadSceneWithAnimation("Animation");
             Animation_Scene.Scene_Name = targetScene;
@@ -30,13 +30,22 @@ public class SceneLoader : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "cave")
+        float currentProgress = ProgressManager.Instance.progress;
+        if (currentProgress != 100)
         {
-            MoveToVillageOrCave("cave");
+            if (other.gameObject.tag == "cave")
+            {
+                MoveToVillageOrCave("cave");
+            }
+            else if (other.gameObject.tag == "village")
+            {
+                MoveToVillageOrCave("village");
+            }
         }
-        else if (other.gameObject.tag == "Village")
+        else
         {
-            MoveToVillageOrCave("Village");
+            //엔딩 로직 작성해야함
+            MoveToVillageOrCave("ending");
         }
 
     }

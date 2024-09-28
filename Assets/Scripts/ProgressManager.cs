@@ -6,6 +6,8 @@ public class ProgressManager : MonoBehaviour
     public static ProgressManager Instance { get; private set; }
     public float progress { get; private set; }
     public float maxProgress = 100f;
+    [SerializeField]
+    private GameObject Managers;
 
     [Header("Post-processing Settings")]
     public PostProcessVolume postProcessVolume;
@@ -19,11 +21,11 @@ public class ProgressManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(Managers);
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(Managers);
         }
     }
 

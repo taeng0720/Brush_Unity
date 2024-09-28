@@ -1,11 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TileManager : MonoBehaviour
 {
     public GameObject[] tiles;
     public ProgressManager progressManager;
+
+    private readonly Dictionary<float, int> progressToDisableMap = new Dictionary<float, int>
+    {
+        { 95, 80 },
+        { 90, 70 },
+        { 80, 55 },
+        { 70, 50 },
+        { 60, 40 },
+        { 50, 35 },
+        { 40, 30 },
+        { 30, 20 },
+        { 20, 10 },
+        { 10, 5 }
+    };
 
     private void Start()
     {
@@ -17,24 +32,17 @@ public class TileManager : MonoBehaviour
 
     private void Update()
     {
-        float progress = progressManager.GetProgress();
-        DisableTilesBasedOnProgress(progress);
+        if (SceneManager.GetActiveScene().name == "village")
+        {
+            float progress = progressManager.GetProgress();
+            DisableTilesBasedOnProgress(progress);
+        }
+
     }
 
     private void DisableTilesBasedOnProgress(float progress)
     {
-        int tilesToDisable = 0;
-
-        if (progress >= 95) tilesToDisable = 80;
-        else if (progress >= 90) tilesToDisable = 70;
-        else if (progress >= 80) tilesToDisable = 55;
-        else if (progress >= 70) tilesToDisable = 50;
-        else if (progress >= 60) tilesToDisable = 40;
-        else if (progress >= 50) tilesToDisable = 35;
-        else if (progress >= 40) tilesToDisable = 30;
-        else if (progress >= 30) tilesToDisable = 20;
-        else if (progress >= 20) tilesToDisable = 10;
-        else if (progress >= 10) tilesToDisable = 5;
+        int tilesToDisable = GetTilesToDisable(progress);
 
         List<GameObject> inactiveTiles = new List<GameObject>();
         foreach (GameObject tile in tiles)
@@ -55,5 +63,17 @@ public class TileManager : MonoBehaviour
                 inactiveTiles.Add(tile);
             }
         }
+    }
+
+    private int GetTilesToDisable(float progress)
+    {
+        foreach (var entry in progressToDisableMap)
+        {
+            if (progress >= entry.Key)
+            {
+                return entry.Value;
+            }
+        }
+        return 0;
     }
 }

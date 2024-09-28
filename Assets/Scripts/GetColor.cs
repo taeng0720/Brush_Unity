@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using DG.Tweening;
 
 public class GetColor : MonoBehaviour
 {
     public static GetColor Instance;
+    [SerializeField]
+    GameObject canvas;
 
     [Header("Input")]
     public KeyCode getColorKey = KeyCode.R;
@@ -16,9 +20,15 @@ public class GetColor : MonoBehaviour
     public Color defaultColor = new Color(128 / 255f, 128 / 255f, 128 / 255f);
     public bool holdColor = false;
     [SerializeField] private float maxDistance = 10f;
-    private int selectColor = 1;
+    [SerializeField] private int selectColor = 1;
     public Image[] colorsUI;
     public ProgressManager progressManager;
+
+    [Header("UI")]
+    public TextMeshProUGUI messageText;
+    public RectTransform messagePanel;
+
+    public Material assignedMaterial;
 
     private void Awake()
     {
@@ -26,10 +36,12 @@ public class GetColor : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(canvas);
         }
         else
         {
             Destroy(gameObject);
+            Destroy(canvas);
         }
     }
 
@@ -40,21 +52,31 @@ public class GetColor : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, maxDistance))
         {
-            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("ColorObject") &&
-                hit.transform.gameObject.GetComponent<MeshRenderer>().material.color != defaultColor)
+            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("ColorObject") && colorsUI[selectColor - 1].color == defaultColor)
             {
-                currentColor = hit.transform.gameObject.GetComponent<MeshRenderer>().material.color;
-                hit.transform.gameObject.GetComponent<MeshRenderer>().material.color = defaultColor;
-                ColorInventory();
+                MeshRenderer meshRenderer = hit.transform.gameObject.GetComponent<MeshRenderer>();
+                currentColor = meshRenderer.material.color;
+                meshRenderer.material = assignedMaterial;
+                TryStoreColorInInventory(currentColor);
             }
         }
+    }
+
+    private void TryStoreColorInInventory(Color color)
+    {
+        if (colorsUI[selectColor - 1].color != defaultColor)
+        {
+            ShowWarningMessage($"슬롯 {selectColor}에 이미 색상이 존재합니다!");
+            return;
+        }
+        colorsUI[selectColor - 1].color = color;
+        holdColor = true;
     }
 
     private void SelectedColor()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1)) selectColor = 1;
         if (Input.GetKeyDown(KeyCode.Alpha2)) selectColor = 2;
-        if (Input.GetKeyDown(KeyCode.Alpha3)) selectColor = 3;
     }
 
     private void ApplyColor()
@@ -72,27 +94,54 @@ public class GetColor : MonoBehaviour
                 colorsUI[selectColor - 1].color = defaultColor;
                 holdColor = false;
 
-                progressManager.IncreaseProgress(1.5f);
-                Debug.Log("Progress increased by 1.5");
+                progressManager.IncreaseProgress(5f);
+                Debug.Log("Progress increased by 5.");
             }
         }
     }
 
-    private void ColorInventory()
+    private void CheckInventoryStatus()
     {
-        if (selectColor >= 1 && selectColor <= colorsUI.Length)
+        if (colorsUI[0].color == defaultColor)
         {
-            colorsUI[selectColor - 1].color = currentColor;
-            holdColor = true;
+            ShowWarningMessage("1번이 비어있어! 1번으로 바꿔서 색을 가져오자!");
         }
-
-        for (int i = 0; i < colorsUI.Length; i++)
+        else if (colorsUI[1].color == defaultColor)
         {
-            if (colorsUI[i].color != defaultColor)
+            ShowWarningMessage("2번이 비어있어! 2번으로 바꿔서 색을 가져오자!");
+        }
+        else if (IsInventoryFull())
+        {
+            ShowWarningMessage("전부 다 차있어! 동굴로 가서 색을 넣고 다시 오자!");
+        }
+    }
+
+    private bool IsInventoryFull()
+    {
+        foreach (var colorSlot in colorsUI)
+        {
+            if (colorSlot.color == defaultColor)
             {
-                holdColor = false;
+                return false;
             }
         }
+        return true;
+    }
+
+    private void ShowWarningMessage(string message)
+    {
+        messageText.text = message;
+        messagePanel.DOKill();
+        messagePanel.DOAnchorPosY(0, 0.5f).OnComplete(() =>
+        {
+            StartCoroutine(HideMessageAfterDelay(1f));
+        });
+    }
+
+    private IEnumerator HideMessageAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        messagePanel.DOAnchorPosY(200, 0.5f);
     }
 
     private void Start()
@@ -101,6 +150,7 @@ public class GetColor : MonoBehaviour
         {
             colorsUI[i].color = defaultColor;
         }
+        messagePanel.anchoredPosition = new Vector2(0, 200);
     }
 
     void Update()

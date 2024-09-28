@@ -6,6 +6,7 @@ TagManager:
   tags:
   - GetColor
   - cave
+  - village
   layers:
   - Default
   - TransparentFX
