@@ -55,7 +55,9 @@ public class Swinging : MonoBehaviour
         if (GetComponent<Grappling>() != null)
             GetComponent<Grappling>().StopGrapple();
         pm.ResetRestrictions();
+
         pm.swinging = true;
+
 
         swingPoint = predictionHit.point;
         joint = player.gameObject.AddComponent<SpringJoint>();

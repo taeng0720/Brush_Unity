@@ -2941,6 +2941,12 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.030468712, y: 0.02395026, z: 0.025191054}
   m_Center: {x: 0.0009761279, y: 0.0021145127, z: 0.0010499442}
+--- !u!136 &180824077 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 1041262692987146757, guid: 1a08aee51190646928e3fcff81c78522,
+    type: 3}
+  m_PrefabInstance: {fileID: 2100299015}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &183058183 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8cbdaa03b8fbd426ca9c7265b2c89906,
@@ -39001,7 +39007,7 @@ MonoBehaviour:
   dialougeText: {fileID: 1257816417}
   tutorialDialogueData: {fileID: 11400000, guid: 3ca8199c3ff20d54b8e70fb366fdb29f,
     type: 2}
-  playerCollider: {fileID: 0}
+  playerCollider: {fileID: 180824077}
   nextSpeed: 0.5
   tutorialIndex: 0
 --- !u!4 &2070677933

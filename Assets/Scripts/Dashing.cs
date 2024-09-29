@@ -46,7 +46,7 @@ public class Dashing : MonoBehaviour
             Dash();
         }
 
-        if(dashCdTimer > 0)
+        if (dashCdTimer > 0)
         {
             dashCdTimer -= Time.deltaTime;
         }
@@ -57,6 +57,7 @@ public class Dashing : MonoBehaviour
         else dashCdTimer = dashCd;
 
         pm.dashing = true;
+        TutorialManager.Instance.isDash = true;
         pm.maxYSpeed = maxDashYSpeed;
 
         cam.DoFov(dashFov);
@@ -84,14 +85,14 @@ public class Dashing : MonoBehaviour
     private Vector3 delayedForceToApply;
     private void DelayedDashForce()
     {
-        if(resetVel)
+        if (resetVel)
             rb.linearVelocity = Vector3.zero;
 
         rb.AddForce(delayedForceToApply, ForceMode.Impulse);
     }
     private void ResetDash()
     {
-        pm.dashing=false;
+        pm.dashing = false;
         pm.maxYSpeed = 0;
 
         cam.DoFov(80f);
@@ -111,11 +112,11 @@ public class Dashing : MonoBehaviour
         {
             direction = (forwardT.forward * verticalInput) + (forwardT.right * horizontalInput);
         }
-            
+
         else
             direction = forwardT.forward;
 
-        if(verticalInput == 0 && horizontalInput == 0)
+        if (verticalInput == 0 && horizontalInput == 0)
             direction = forwardT.forward;
 
         return direction.normalized;

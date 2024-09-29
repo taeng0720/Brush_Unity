@@ -54,6 +54,7 @@ public class GetColor : MonoBehaviour
         {
             if (hit.transform.gameObject.layer == LayerMask.NameToLayer("ColorObject") && colorsUI[selectColor - 1].color == defaultColor)
             {
+                TutorialManager.Instance.isGetColor = true;
                 MeshRenderer meshRenderer = hit.transform.gameObject.GetComponent<MeshRenderer>();
                 currentColor = meshRenderer.material.color;
                 meshRenderer.material = assignedMaterial;
@@ -90,6 +91,7 @@ public class GetColor : MonoBehaviour
                 colorsUI[selectColor - 1].color != defaultColor &&
                 hit.transform.gameObject.GetComponent<MeshRenderer>().material.color != colorsUI[selectColor - 1].color)
             {
+                TutorialManager.Instance.isApplyColor = true;
                 hit.transform.gameObject.GetComponent<MeshRenderer>().material.color = colorsUI[selectColor - 1].color;
                 colorsUI[selectColor - 1].color = defaultColor;
                 holdColor = false;

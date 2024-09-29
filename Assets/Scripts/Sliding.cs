@@ -19,14 +19,14 @@ public class Sliding : MonoBehaviour
     public float slideYScale;
     private float startYScale;
 
-    
+
 
     [Header("Input")]
     public KeyCode slideKey = KeyCode.LeftControl;
     private float horizontalInput;
     private float verticalInput;
 
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +37,7 @@ public class Sliding : MonoBehaviour
     }
     private void StartSlide()
     {
+        TutorialManager.Instance.isSliding = true;
         pm.sliding = true;
 
         playerObj.localScale = new Vector3(playerObj.localScale.x, slideYScale, playerObj.localScale.z);
@@ -50,7 +51,7 @@ public class Sliding : MonoBehaviour
         Vector3 inputDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
         //sliding normal
-        if(!pm.OnSlope() || rb.linearVelocity.y > -0.1f)
+        if (!pm.OnSlope() || rb.linearVelocity.y > -0.1f)
         {
             rb.AddForce(inputDirection.normalized * slideForce, ForceMode.Force);
 
@@ -63,7 +64,7 @@ public class Sliding : MonoBehaviour
             rb.AddForce(pm.GetSlopeMoveDirection(inputDirection) * slideForce, ForceMode.Force);
         }
 
-        if(slideTimer <= 0)
+        if (slideTimer <= 0)
         {
             StopSlide();
         }
@@ -80,11 +81,11 @@ public class Sliding : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        if(Input.GetKeyDown(slideKey) && (horizontalInput !=0 || verticalInput !=0))
+        if (Input.GetKeyDown(slideKey) && (horizontalInput != 0 || verticalInput != 0))
         {
             StartSlide();
         }
-        if(Input.GetKeyUp(slideKey) && pm.sliding)
+        if (Input.GetKeyUp(slideKey) && pm.sliding)
         {
             StopSlide();
         }
