@@ -97,6 +97,7 @@ public class TutorialManager : MonoBehaviour
 
         yield return DisplayMessage("저 뒤에 있는 동굴로 이동을 해보자!");
         CaveDeactivateObjects();
+        DeactivateObjects();
         yield return WaitForInputCondition(() => isCave);
 
         yield return DisplayMessage("참 색을 넣으려면 F키를 누르면 색이 넣어져!");
@@ -166,9 +167,31 @@ public class TutorialManager : MonoBehaviour
     {
         foreach (GameObject obj in objectsToDeactivate)
         {
+            StartCoroutine(FadeOut(obj));
+        }
+    }
+
+    private IEnumerator FadeOut(GameObject obj)
+    {
+        Renderer renderer = obj.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            Color originalColor = renderer.material.color;
+            float fadeDuration = 0.5f;
+            float fadeSpeed = 1f / fadeDuration;
+            float fadeAmount = 1f;
+
+            while (fadeAmount > 0)
+            {
+                fadeAmount -= fadeSpeed * Time.deltaTime;
+                renderer.material.color = new Color(originalColor.r, originalColor.g, originalColor.b, fadeAmount);
+                yield return null;
+            }
+
             obj.SetActive(false);
         }
     }
+
 
     private void CaveDeactivateObjects()
     {
