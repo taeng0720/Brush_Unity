@@ -21,35 +21,35 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Á¡ÇÁÇÑ´Ù
-        if (Input.GetMouseButtonDown(0) && this.rigid2D.velocity.y == 0)
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½
+        if (Input.GetMouseButtonDown(0) && this.rigid2D.linearVelocity.y == 0)
         {
             this.animator.SetTrigger("JumpTrigger");
             this.rigid2D.AddForce(transform.up * this.jumpForce);
         }
 
-        // ÁÂ¿ì ÀÌµ¿
+        // ï¿½Â¿ï¿½ ï¿½Ìµï¿½
         int key = 0;
         if (Input.acceleration.x > this.threshold) key = 1;
         if (Input.acceleration.x < -this.threshold) key = -1;
 
-        // ÇÃ·¹ÀÌ¾î ¼Óµµ
-        float speedx = Mathf.Abs(this.rigid2D.velocity.x);
+        // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Óµï¿½
+        float speedx = Mathf.Abs(this.rigid2D.linearVelocity.x);
 
-        // ½ºÇÇµå Á¦ÇÑ
+        // ï¿½ï¿½ï¿½Çµï¿½ ï¿½ï¿½ï¿½ï¿½
         if (speedx < this.maxWalkSpeed)
         {
             this.rigid2D.AddForce(transform.right * key * this.walkForce);
         }
 
-        // ¿òÁ÷ÀÌ´Â ¹æÇâ¿¡ ¸ÂÃç¼­ ¹ÝÀü
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½â¿¡ ï¿½ï¿½ï¿½ç¼­ ï¿½ï¿½ï¿½ï¿½
         if (key != 0)
         {
             transform.localScale = new Vector3(key, 1, 1);
         }
 
-        // ÇÃ·¹ÀÌ¾î ¼Óµµ¿¡ ¸ÂÃç ¾Ö´Ï¸ÞÀÌ¼Ç ¼Óµµ¸¦ ¹Ù²Û´Ù
-        if (this.rigid2D.velocity.y == 0)
+        // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Óµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½Óµï¿½ï¿½ï¿½ ï¿½Ù²Û´ï¿½
+        if (this.rigid2D.linearVelocity.y == 0)
         {
             this.animator.speed = speedx / 2.0f;
         }
@@ -58,17 +58,17 @@ public class PlayerController : MonoBehaviour
             this.animator.speed = 1.0f;
         }
 
-        // ÇÃ·¹ÀÌ¾î°¡ È­¸é ¹ÛÀ¸·Î ³ª°¬´Ù¸é Ã³À½ºÎÅÍ
+        // ï¿½Ã·ï¿½ï¿½Ì¾î°¡ È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ù¸ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (transform.position.y < -10)
         {
             SceneManager.LoadScene("GameScene");
         }
     }
 
-    // °ñ µµÂø
+    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("°ñ");
+        Debug.Log("ï¿½ï¿½");
         SceneManager.LoadScene("ClearScene");
     }
 }

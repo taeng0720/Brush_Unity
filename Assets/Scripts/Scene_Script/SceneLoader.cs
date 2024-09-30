@@ -5,6 +5,9 @@ public class SceneLoader : MonoBehaviour
 {
     public void LoadScene(string sceneName)
     {
+
+
+
         SceneManager.LoadScene(sceneName);
     }
 
@@ -36,10 +39,12 @@ public class SceneLoader : MonoBehaviour
         {
             if (other.gameObject.tag == "cave")
             {
+                ColorManager.Instance.SaveAllColors();
                 MoveToVillageOrCave("cave");
             }
             else if (other.gameObject.tag == "village")
             {
+                CaveColorManager.Instance.SaveAllColors();
                 MoveToVillageOrCave("village");
             }
         }

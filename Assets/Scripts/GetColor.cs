@@ -8,14 +8,9 @@ using DG.Tweening;
 public class GetColor : MonoBehaviour
 {
     public static GetColor Instance;
-    [SerializeField]
-    GameObject canvas;
-
-    [Header("Input")]
+    [SerializeField] GameObject canvas;
     public KeyCode getColorKey = KeyCode.R;
     public KeyCode applyColorKey = KeyCode.F;
-
-    [Header("References")]
     public Color currentColor;
     public Color defaultColor = new Color(128 / 255f, 128 / 255f, 128 / 255f);
     public bool holdColor = false;
@@ -23,12 +18,8 @@ public class GetColor : MonoBehaviour
     [SerializeField] private int selectColor = 1;
     public Image[] colorsUI;
     public ProgressManager progressManager;
-
-    [Header("UI")]
-    public TextMeshProUGUI messageText;
-    public RectTransform messagePanel;
-
     public Material assignedMaterial;
+    public Material forbiddenMaterial;
 
     private void Awake()
     {
@@ -48,30 +39,36 @@ public class GetColor : MonoBehaviour
     private void GetMaterial()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, maxDistance))
+        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance))
         {
             if (hit.transform.gameObject.layer == LayerMask.NameToLayer("ColorObject") && colorsUI[selectColor - 1].color == defaultColor)
             {
-                TutorialManager.Instance.isGetColor = true;
                 MeshRenderer meshRenderer = hit.transform.gameObject.GetComponent<MeshRenderer>();
-                currentColor = meshRenderer.material.color;
-                meshRenderer.material = assignedMaterial;
-                TryStoreColorInInventory(currentColor);
+                if (meshRenderer.material != forbiddenMaterial)
+                {
+                    currentColor = meshRenderer.material.color;
+                    meshRenderer.material = assignedMaterial;
+                    TryStoreColorInInventory(currentColor);
+                }
+                else
+                {
+                    Debug.Log("이 매터리얼은 추출할 수 없습니다!");
+                }
             }
         }
     }
 
     private void TryStoreColorInInventory(Color color)
     {
-        if (colorsUI[selectColor - 1].color != defaultColor)
+        if (colorsUI[selectColor - 1].color == defaultColor)
         {
-            ShowWarningMessage($"슬롯 {selectColor}에 이미 색상이 존재합니다!");
-            return;
+            colorsUI[selectColor - 1].color = color;
+            holdColor = true;
         }
-        colorsUI[selectColor - 1].color = color;
-        holdColor = true;
+        else
+        {
+            Debug.Log($"슬롯 {selectColor}에 이미 색상이 존재합니다!");
+        }
     }
 
     private void SelectedColor()
@@ -83,67 +80,21 @@ public class GetColor : MonoBehaviour
     private void ApplyColor()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, maxDistance))
+        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance))
         {
-            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("ApplyColorObject") &&
-                colorsUI[selectColor - 1].color != defaultColor &&
-                hit.transform.gameObject.GetComponent<MeshRenderer>().material.color != colorsUI[selectColor - 1].color)
+            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("ApplyColorObject") && colorsUI[selectColor - 1].color != defaultColor)
             {
-                TutorialManager.Instance.isApplyColor = true;
-                hit.transform.gameObject.GetComponent<MeshRenderer>().material.color = colorsUI[selectColor - 1].color;
-                colorsUI[selectColor - 1].color = defaultColor;
-                holdColor = false;
-
-                progressManager.IncreaseProgress(5f);
-                Debug.Log("Progress increased by 5.");
+                MeshRenderer meshRenderer = hit.transform.gameObject.GetComponent<MeshRenderer>();
+                if (meshRenderer.material.color != colorsUI[selectColor - 1].color)
+                {
+                    meshRenderer.material.color = colorsUI[selectColor - 1].color;
+                    colorsUI[selectColor - 1].color = defaultColor;
+                    holdColor = false;
+                    progressManager.IncreaseProgress(5f);
+                    Debug.Log("Progress increased by 5.");
+                }
             }
         }
-    }
-
-    private void CheckInventoryStatus()
-    {
-        if (colorsUI[0].color == defaultColor)
-        {
-            ShowWarningMessage("1번이 비어있어! 1번으로 바꿔서 색을 가져오자!");
-        }
-        else if (colorsUI[1].color == defaultColor)
-        {
-            ShowWarningMessage("2번이 비어있어! 2번으로 바꿔서 색을 가져오자!");
-        }
-        else if (IsInventoryFull())
-        {
-            ShowWarningMessage("전부 다 차있어! 동굴로 가서 색을 넣고 다시 오자!");
-        }
-    }
-
-    private bool IsInventoryFull()
-    {
-        foreach (var colorSlot in colorsUI)
-        {
-            if (colorSlot.color == defaultColor)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private void ShowWarningMessage(string message)
-    {
-        messageText.text = message;
-        messagePanel.DOKill();
-        messagePanel.DOAnchorPosY(0, 0.5f).OnComplete(() =>
-        {
-            StartCoroutine(HideMessageAfterDelay(1f));
-        });
-    }
-
-    private IEnumerator HideMessageAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        messagePanel.DOAnchorPosY(200, 0.5f);
     }
 
     private void Start()
@@ -152,19 +103,12 @@ public class GetColor : MonoBehaviour
         {
             colorsUI[i].color = defaultColor;
         }
-        messagePanel.anchoredPosition = new Vector2(0, 200);
     }
 
     void Update()
     {
         SelectedColor();
-        if (Input.GetKeyDown(getColorKey))
-        {
-            GetMaterial();
-        }
-        if (Input.GetKeyDown(applyColorKey))
-        {
-            ApplyColor();
-        }
+        if (Input.GetKeyDown(getColorKey)) GetMaterial();
+        if (Input.GetKeyDown(applyColorKey)) ApplyColor();
     }
 }

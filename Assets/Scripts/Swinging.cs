@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Swinging : MonoBehaviour
 {
@@ -33,6 +34,20 @@ public class Swinging : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(predictionPoint);
+        // 씬이 전환될 때 이벤트에 StopSwing 연결
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        // 씬 로드 이벤트에서 연결 해제
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 씬 전환 시 스윙 초기화
+        StopSwing();
     }
 
     private void Update()
@@ -57,7 +72,6 @@ public class Swinging : MonoBehaviour
         pm.ResetRestrictions();
 
         pm.swinging = true;
-
 
         swingPoint = predictionHit.point;
         joint = player.gameObject.AddComponent<SpringJoint>();
