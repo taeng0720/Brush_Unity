@@ -20,8 +20,9 @@ public class SceneLoader : MonoBehaviour
 
         if (currentProgress % 20 == 0 && currentProgress != 0)
         {
-            LoadSceneWithAnimation("Animation");
             Animation_Scene.Scene_Name = targetScene;
+            LoadSceneWithAnimation("Animation");
+
         }
         else
         {

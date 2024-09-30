@@ -78,7 +78,7 @@ public class TutorialManager : MonoBehaviour
 
         EnablePlayerScripts();
 
-        yield return DisplayMessage("Q를 눌러봐! 대쉬가 나올거야~");
+        yield return DisplayMessage("E를 눌러봐! 대쉬가 나올거야~");
         yield return WaitForInputCondition(() => isDash);
 
         yield return DisplayMessage("그거 말고도 많아 Space 점프라던가~");
@@ -87,7 +87,7 @@ public class TutorialManager : MonoBehaviour
         yield return DisplayMessage("LeftCtrl 슬라이딩이라던가~");
         yield return WaitForInputCondition(() => isSliding);
 
-        yield return DisplayMessage("LeftAlt 앉기같은거!");
+        yield return DisplayMessage("c 앉기같은거!");
         yield return WaitForInputCondition(() => isAlt);
 
         yield return DisplayMessage("그럼 저기 저 신기한 색이 있는 돌로 가보자!");
