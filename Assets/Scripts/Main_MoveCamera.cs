@@ -9,6 +9,7 @@ public class Main_MoveCamera : MonoBehaviour
     private void Start()
     {
         MoveAndRotateCamera();
+        Cursor.lockState = CursorLockMode.None;
     }
 
     private void MoveAndRotateCamera()

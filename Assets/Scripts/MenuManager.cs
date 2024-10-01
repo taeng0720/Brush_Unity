@@ -26,64 +26,55 @@ public class MenuManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name == "GameScene")
-        {
-            canvas = GameObject.Find("Canvas");
-            menuPanel = canvas.transform.GetChild(0).gameObject;
-            exitBtn = menuPanel.transform.GetChild(0).gameObject.GetComponent<Button>();
-            continueBtn = menuPanel.transform.GetChild(1).gameObject.GetComponent<Button>();
-            GameManager.instance.gameObject.GetComponent<FpsStatus>().enabled = true;
-            if (exitBtn != null && continueBtn != null)
-            {
-                exitBtn.onClick.AddListener(Exitbtn);
-                continueBtn.onClick.AddListener(Continue);
-            }
-        }
-
-    }
-    // Update is called once per frame
     void Update()
     {
-        if(SceneManager.GetActiveScene().name == "GameScene")
+        if (Input.GetKeyDown(KeyCode.Escape) && menuEnabled == false)
         {
-            if (Input.GetKeyDown(KeyCode.Escape) && menuEnabled == false)
-            {
-                menuPanel.SetActive(true);
-                menuEnabled = true;
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            else if (Input.GetKeyDown(KeyCode.Escape) && menuEnabled == true)
-            {
-                Continue();
-            }
+            if (SceneManager.GetActiveScene().name == "Main")
+                return;
+            menuPanel.SetActive(true);
+            menuEnabled = true;
+            Time.timeScale = 0;
+            Cursor.visible = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.Escape) && menuEnabled == true)
+        {
+            if (SceneManager.GetActiveScene().name == "Main")
+                return;
+            Continue();
+        }
+        if (menuEnabled)
+        {
+            Cursor.lockState = CursorLockMode.None;
         }
     }
 
     public void Exitbtn()
     {
-        DataManager.Instance.SaveGameData();
         menuEnabled = false;
-        SceneManager.LoadSceneAsync("MainScene", LoadSceneMode.Single);
-        
+        CaveColorManager.Instance.ResetColors();
+        ColorManager.Instance.ResetColors();
+        Continue();
+        DeleteAllObjects();
+        Cursor.lockState = CursorLockMode.None;
+        SceneManager.LoadScene("Main");
+
     }
     public void Continue()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Time.timeScale = 1;
         menuPanel.SetActive(false);
         menuEnabled = false;
-        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+    void DeleteAllObjects()
+    {
+        GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
+
+        foreach (GameObject obj in allObjects)
+        {
+            Destroy(obj);
+        }
     }
 }

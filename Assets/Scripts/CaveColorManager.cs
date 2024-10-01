@@ -117,7 +117,7 @@ public class CaveColorManager : MonoBehaviour
         ResetColors();
     }
 
-    private void ResetColors()
+    public void ResetColors()
     {
         for (int i = 0; i < colorObjects.Length; i++)
         {

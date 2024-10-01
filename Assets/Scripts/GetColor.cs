@@ -49,6 +49,7 @@ public class GetColor : MonoBehaviour
                     currentColor = meshRenderer.material.color;
                     meshRenderer.material = assignedMaterial;
                     TryStoreColorInInventory(currentColor);
+                    TutorialManager.Instance.isGetColor = true;
                 }
                 else
                 {
@@ -87,6 +88,7 @@ public class GetColor : MonoBehaviour
                 MeshRenderer meshRenderer = hit.transform.gameObject.GetComponent<MeshRenderer>();
                 if (meshRenderer.material.color != colorsUI[selectColor - 1].color)
                 {
+                    TutorialManager.Instance.isApplyColor = true;
                     meshRenderer.material.color = colorsUI[selectColor - 1].color;
                     colorsUI[selectColor - 1].color = defaultColor;
                     holdColor = false;
