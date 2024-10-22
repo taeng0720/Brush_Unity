@@ -53,13 +53,13 @@ public class TutorialManager : MonoBehaviour
         {
             isCave = true;
         }
-        if (!tutorialActive)
-        {
-            if (SceneManager.GetActiveScene().name == "village")
-            {
-                DeactivateObjects();
-            }
-        }
+        // if (!tutorialActive)
+        // {
+        //     if (SceneManager.GetActiveScene().name == "village")
+        //     {
+        //         DeactivateObjects();
+        //     }
+        // }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {

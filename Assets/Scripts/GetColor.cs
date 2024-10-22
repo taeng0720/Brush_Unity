@@ -17,6 +17,7 @@ public class GetColor : MonoBehaviour
     [SerializeField] private float maxDistance = 10f;
     [SerializeField] private int selectColor = 1;
     public Image[] colorsUI;
+    public Image[] currentColorArrowUI;
     public ProgressManager progressManager;
     public Material assignedMaterial;
     public Material forbiddenMaterial;
@@ -74,8 +75,25 @@ public class GetColor : MonoBehaviour
 
     private void SelectedColor()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1)) selectColor = 1;
-        if (Input.GetKeyDown(KeyCode.Alpha2)) selectColor = 2;
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            selectColor = 1;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2)) 
+        {
+            selectColor = 2; 
+        }
+
+        if (selectColor == 1)
+        {
+            currentColorArrowUI[0].enabled = true;
+            currentColorArrowUI[1].enabled = false;
+        }
+        else if (selectColor == 2)
+        {
+            currentColorArrowUI[0].enabled = false;
+            currentColorArrowUI[1].enabled = true;
+        }
     }
 
     private void ApplyColor()
